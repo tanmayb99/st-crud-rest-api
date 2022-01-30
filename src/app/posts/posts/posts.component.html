@@ -1,0 +1,111 @@
+<div class="container-fluid">
+    <div class="row text-center w-60 m-auto">
+        <div class="d-flex align-items-center justify-content-between">
+            <h3 class="text-center">List of Posts</h3>
+            <input type="text" *ngIf="isPostsLoaded" placeholder="Search Post" autocomplete="off" class="w-30" name="search" [(ngModel)]="search" (keyup)="handleSearch()">
+        </div>
+
+        <div *ngIf="!isPostsLoaded" class="white-bg d-grid  mt-10 fetch-post">
+            <button *ngIf="!showLoader" class="ripple primary-btn" (click)="fetchPosts()" matTooltip="Click here to get list of Posts">Get List of Posts</button>
+            <img
+                *ngIf="showLoader"
+                class="api-loader mr-10"
+                src="assets/images/Dual Ring-1s-200px.svg"
+                alt="spinner"
+                loading="lazy"
+            />
+        </div>
+
+        <div class="col-md-12" *ngIf="isPostsLoaded">
+            <div class="table">
+                <table class="gfg w-100">
+                    <thead>
+                        <tr>
+                            <th class="d-flex align-items-center">
+                                Post ID
+                                <i class="fas fa-sort-numeric-down cursor sort-icon" *ngIf="isSortingAsc" (click)="handleSort()" matTooltip="Sort Post"></i>
+                                <i class="fas fa-sort-numeric-up cursor sort-icon" *ngIf="!isSortingAsc" (click)="handleSort()" matTooltip="Sort Post"></i>
+                            </th>
+                            <th>Title</th>
+                            <th>User ID</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <ng-container *ngFor="let post of posts; let i=index">
+                            <tr>
+                                <td>{{ post.id }}</td>
+                                <td>{{ post.title }}</td>
+                                <td>{{ post.userId }}</td>
+                                <td>
+                                    <mat-icon aria-hidden="false" matTooltip="View Post" 
+                                        class="cursor mr-5" aria-label="View Post" [routerLink]="['/posts', post.id]">
+                                        remove_red_eye
+                                    </mat-icon>
+
+                                    
+                                    <mat-icon (click)="handleDelete( post.id )" aria-hidden="false" matTooltip="Delete Post" class="trash cursor mr-5" aria-label="Delete Post">delete</mat-icon>
+                                    
+                                    <mat-icon aria-hidden="false" data-bs-toggle="modal" data-bs-target="#addPost" (click)="handleUpdate(post)" matTooltip="Edit Post" class="cursor pen" aria-label="Update Post">edit</mat-icon>
+                                    
+                                    <mat-icon class="ml-5 cursor comment" matTooltip="View Comments" [matBadge]="post.commentLength" matBadgeColor="warn" [routerLink]="['/posts', post.id]">comment</mat-icon>
+                                </td>
+                            </tr>
+                        </ng-container>
+                        <ng-container *ngIf="!posts.length">
+                            <tr>
+                                <td class="text-center" colspan="4">No Post Found :(</td>
+                            </tr>
+                        </ng-container>
+                    </tbody>
+                </table>
+            </div>
+            <button class="ripple primary-btn f-right" data-bs-toggle="modal" data-bs-target="#addPost">Add Post +</button>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- =====================================modal=============================== -->
+<div class="modal fade" id="addPost" tabindex="-1" aria-labelledby="addPostLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+            <h5 class="modal-title" id="addPostLabel">Submit below details to add your post</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" (click)="resetUpdate()"></button>
+            </div>
+            <form [formGroup]="addPost">
+                <div class="modal-body">
+                    <div class="form-group mb-20">
+                        <label for="userId">User ID</label>
+                        <input type="text" class="form-control" placeholder="Enter User ID" formControlName="userId">
+                        <div *ngIf="userId?.invalid && (userId?.dirty || userId?.touched)" class="alert alert-danger">
+                            Please enter valid User ID
+                        </div>
+                    </div>
+                    <div class="form-group mb-20">
+                        <label for="title">Title</label>
+                        <input type="text" class="form-control" id="title" placeholder="Enter Title" formControlName="title">
+                        <div *ngIf="title?.invalid && (title?.dirty || title?.touched)" class="alert alert-danger">
+                            Please enter valid Title
+                        </div>
+                    </div>
+                    <div class="form-group mb-20">
+                        <label for="body">Body</label>
+                        <input type="text" class="form-control" id="body" placeholder="Enter Body" formControlName="body">
+                        <div *ngIf="body?.invalid && (body?.dirty || body?.touched)" class="alert alert-danger">
+                            Please enter valid Body
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" (click)="resetUpdate()" data-bs-dismiss="modal">Close</button>
+                    <button type="button" [disabled]="addPost.invalid" data-bs-dismiss="modal" (click)="handleAddPost()" class="primary-btn modal-btn">
+                        {{ isUpdating ? 'Update' : 'Add' }}
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

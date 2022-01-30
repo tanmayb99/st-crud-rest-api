@@ -1,0 +1,69 @@
+<div class="comments w-90 m-auto">
+    
+    <div class="d-flex align-items-center justify-content-between mb-2">
+        <p>Comments:</p>
+        <button class="primary-btn" data-bs-toggle="modal" data-bs-target="#addComment">Add Comment +</button>
+    </div>
+
+    <ng-container *ngFor="let comment of comments; let i=index">
+        <div class="comment">
+            
+            <div class="d-flex align-items-center justify-content-between mb-3">
+                <p class="m-0">{{ comment.id }}. {{ comment.name | titlecase }}</p>
+                <div>
+                    <mat-icon (click)="handleDeleteComment( comment.id )" aria-hidden="false" matTooltip="Delete Comment" class="trash cursor mr-5" aria-label="Delete Comment">delete</mat-icon>
+    
+                    <mat-icon aria-hidden="false" matTooltip="Edit Comment" class="cursor pen" aria-label="Update Comment"
+                    data-bs-toggle="modal" data-bs-target="#addComment" (click)="handleUpdate(comment)">edit</mat-icon>
+                </div>
+            </div>
+            
+            <p><strong>Comment</strong>: {{ comment.body }}</p>
+            <small>Commented by: {{ comment.email }}</small>
+
+        </div>
+    </ng-container>
+</div>
+
+<!-- =====================================modal=============================== -->
+<div class="modal fade" id="addComment" tabindex="-1" aria-labelledby="addCommentLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+            <h5 class="modal-title" id="addCommentLabel">Submit below details to add your comment</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" (click)="resetUpdate()"></button>
+            </div>
+            <form [formGroup]="addComment">
+                <div class="modal-body">
+                    <div class="form-group mb-20">
+                        <label for="name">Name</label>
+                        <input type="text" class="form-control" placeholder="Enter Name" formControlName="name" autocomplete="off">
+                        <div *ngIf="name?.invalid && (name?.dirty || name?.touched)" class="alert alert-danger">
+                            Please enter valid Name
+                        </div>
+                    </div>
+                    <div class="form-group mb-20">
+                        <label for="email">Email</label>
+                        <input type="text" class="form-control" id="email" placeholder="Enter email" formControlName="email" autocomplete="off">
+                        <div *ngIf="email?.invalid && (email?.dirty || email?.touched)" class="alert alert-danger">
+                            Please enter valid Email
+                        </div>
+                    </div>
+                    <div class="form-group mb-20">
+                        <label for="body">Body</label>
+                        <input type="text" class="form-control" id="body" placeholder="Enter Body" formControlName="body" autocomplete="off">
+                        <div *ngIf="body?.invalid && (body?.dirty || body?.touched)" class="alert alert-danger">
+                            Please enter valid Body
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" (click)="resetUpdate()" data-bs-dismiss="modal">Close</button>
+                    <button type="button" [disabled]="addComment.invalid" data-bs-dismiss="modal" (click)="handleAddComment()" class="primary-btn modal-btn">
+                        {{ isUpdating ? 'Update' : 'Add' }}
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,21 @@
+<div class="container">
+    <div class="row">
+        
+        <div class="white-bg post-data">
+            <button class="ripple primary-btn d-flex align-items-center mb-20"
+                routerLink="/posts" [queryParams]="{isPostsFetched:true}" 
+            >
+                <mat-icon class="back">keyboard_arrow_left</mat-icon>
+                Go back to list of posts
+            </button>
+            <h5 class="mb-20">POST ID: {{ postDetail.id }}</h5>
+            <h5 class="mb-20">Title: {{ postDetail.title | titlecase }}</h5>
+            <p>User ID: {{ postDetail.userId }}</p>
+            <p>Body: {{ postDetail.body }}</p>
+
+            <app-comments></app-comments>
+
+        </div>
+
+    </div>
+</div>

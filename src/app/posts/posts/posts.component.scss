@@ -1,0 +1,34 @@
+.sort{
+    font-size: 10px;
+}
+.modal-btn{
+    border: 0;
+}
+.modal-btn:hover{
+    background: var(--main-color)!important;
+    color: #fff!important;
+}
+.sort-icon{
+    margin-left: 5px;
+    color: #333;
+}
+.comment{
+    margin-left: 5px;
+    position: relative;
+    top: 2px;
+}
+.fetch-post{
+    height: 300px;
+    place-content: center;
+    button:hover{
+        background: var(--main-color)!important;
+        color: #fff!important;
+        border: 1px solid var(--main-color)!important;
+    }
+}
+.api-loader{
+    border: 1px solid #339999;
+    border-radius: 5px;
+    width: 150px;
+    height: 35px;
+}
